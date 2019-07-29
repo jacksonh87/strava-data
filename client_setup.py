@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 """
 Set up a client using stravalib
+
+If prompted enter client ID and client secret from 
+https://www.strava.com/settings/api
+
+Upon authorisation, retrieve the 'code=' section of
+the url and input when prompted
 """
+
 import json
 import os
-import pandas as pd
 import webbrowser
 import time
 from stravalib.client import Client
