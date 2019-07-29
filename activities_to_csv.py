@@ -36,9 +36,10 @@ def athlete_data_to_csv(client, activity_type):
         if save_activity:
             activity_stream = client.get_activity_streams(activity_id, types=types)
             activity_data_frame = pd.DataFrame()
-            for key, value in activity_stream.items():
-                activity_data_frame[key] = value.data
-            activity_data_frame.to_csv(csv_save_path)
+            if hasattr(activity_stream, 'items'):
+                for key, value in activity_stream.items():
+                    activity_data_frame[key] = value.data
+                activity_data_frame.to_csv(csv_save_path)
         
 if __name__ == '__main__':
     client = inititalise_stravalib_client()
