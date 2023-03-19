@@ -8,6 +8,7 @@ import pathlib
 import pandas as pd
 from client_setup import inititalise_stravalib_client
 
+
 def athlete_activities_to_csv(client, activity_type):
     """
     Saves activities from the athlete associated
@@ -50,6 +51,7 @@ def athlete_activities_to_csv(client, activity_type):
                 for key, value in activity_stream.items():
                     activity_data_frame[key] = value.data
                 activity_data_frame.to_csv(csv_save_path)
+
 
 if __name__ == "__main__":
     client = inititalise_stravalib_client()

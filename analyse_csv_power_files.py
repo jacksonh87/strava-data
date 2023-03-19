@@ -7,6 +7,7 @@ import json
 import os
 import pandas as pd
 
+
 def analyse_csv_power_files():
     """
     Runs throughh every power csv file and calculates
@@ -53,6 +54,7 @@ def analyse_csv_power_files():
         json.dump(best_efforts_json_string, f)
 
     return best_efforts_dict, best_efforts_ids_dict, best_efforts_df
+
 
 if __name__ == '__main__':
     best_efforts_dict, best_efforts_ids_dict, best_efforts_df = analyse_csv_power_files()
