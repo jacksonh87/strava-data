@@ -4,6 +4,7 @@ Take a stravalib client and get all the activities that have power data
 into csv files
 """
 import os
+import pathlib
 import pandas as pd
 from client_setup import inititalise_stravalib_client
 
@@ -34,6 +35,10 @@ def athlete_activities_to_csv(client, activity_type):
         elif activity_type == 'running':
             save_activity = (activity.type == 'Run')
             save_dir = './running_data/'
+        # If directory doesn't exist, create it
+        if not pathlib.Path(save_dir).exists():
+            pathlib.Path(save_dir).mkdir()
+        # If file already exists, skip over it
         csv_save_path = save_dir+str(activity_id)+'.csv'
         if os.path.isfile(csv_save_path):
             continue # i.e. skip if file exists already
@@ -41,11 +46,12 @@ def athlete_activities_to_csv(client, activity_type):
             activity_stream = client.get_activity_streams(activity_id, types=types)
             activity_data_frame = pd.DataFrame()
             if hasattr(activity_stream, 'items'):
+                print(csv_save_path)
                 for key, value in activity_stream.items():
                     activity_data_frame[key] = value.data
                 activity_data_frame.to_csv(csv_save_path)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     client = inititalise_stravalib_client()
-    athlete_activities_to_csv(client, 'all')
+    athlete_activities_to_csv(client, "power")
 
