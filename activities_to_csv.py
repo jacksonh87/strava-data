@@ -21,32 +21,48 @@ def athlete_activities_to_csv(client, activity_type):
                     'running' to save run activities
     """
     athlete = client.get_athlete()
-    print("Athlete: {}, \nResource state: {}".format(athlete.firstname+' '+athlete.lastname, athlete.resource_state))
+    print(
+        "Athlete: {}, \nResource state: {}".format(
+            athlete.firstname + " " + athlete.lastname, athlete.resource_state
+        )
+    )
     activities = client.get_activities()
-    types = ['time', 'latlng', 'distance', 'altitude', 'velocity_smooth', 'heartrate', 'cadence', 'watts', 'temp', 'moving', 'grade_smooth']
+    types = [
+        "time",
+        "latlng",
+        "distance",
+        "altitude",
+        "velocity_smooth",
+        "heartrate",
+        "cadence",
+        "watts",
+        "temp",
+        "moving",
+        "grade_smooth",
+    ]
 
     for activity in activities:
         activity_id = activity.id
-        if activity_type == 'all':
+        if activity_type == "all":
             save_activity = True
-            save_dir = './all_activities/'
-        elif activity_type == 'power':
-            save_activity = (activity.device_watts is True)
-            save_dir = './power_data/'
-        elif activity_type == 'running':
-            save_activity = (activity.type == 'Run')
-            save_dir = './running_data/'
+            save_dir = "./all_activities/"
+        elif activity_type == "power":
+            save_activity = activity.device_watts is True
+            save_dir = "./power_data/"
+        elif activity_type == "running":
+            save_activity = activity.type == "Run"
+            save_dir = "./running_data/"
         # If directory doesn't exist, create it
         if not pathlib.Path(save_dir).exists():
             pathlib.Path(save_dir).mkdir()
         # If file already exists, skip over it
-        csv_save_path = save_dir+str(activity_id)+'.csv'
+        csv_save_path = save_dir + str(activity_id) + ".csv"
         if os.path.isfile(csv_save_path):
-            continue # i.e. skip if file exists already
+            continue  # i.e. skip if file exists already
         if save_activity:
             activity_stream = client.get_activity_streams(activity_id, types=types)
             activity_data_frame = pd.DataFrame()
-            if hasattr(activity_stream, 'items'):
+            if hasattr(activity_stream, "items"):
                 print(csv_save_path)
                 for key, value in activity_stream.items():
                     activity_data_frame[key] = value.data
@@ -56,4 +72,3 @@ def athlete_activities_to_csv(client, activity_type):
 if __name__ == "__main__":
     client = inititalise_stravalib_client()
     athlete_activities_to_csv(client, "power")
-
